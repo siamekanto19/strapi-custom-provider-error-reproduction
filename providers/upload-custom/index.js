@@ -10,6 +10,7 @@ const fs = require("fs");
 const path = require("path");
 const fse = require("fs-extra");
 const { PayloadTooLargeError } = require("@strapi/utils").errors;
+const sharp = require("sharp"); // Importing external library - causes issues
 
 const UPLOADS_FOLDER_NAME = "uploads";
 
@@ -45,7 +46,8 @@ module.exports = {
               }
 
               file.url = `/uploads/${file.hash}${file.ext}`;
-
+              // running some function from external library
+              await sharp(file).resize(file.width / 2, file.height / 2).toFile(path.join(uploadPath, `${file.hash}@2x${file.ext}`))
               resolve();
             }
           );
@@ -65,7 +67,8 @@ module.exports = {
               }
 
               file.url = `/${UPLOADS_FOLDER_NAME}/${file.hash}${file.ext}`;
-
+              // running some function from external library
+              await sharp(file).resize(file.width / 2, file.height / 2).toFile(path.join(uploadPath, `${file.hash}@2x${file.ext}`))
               resolve();
             }
           );
